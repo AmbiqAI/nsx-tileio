@@ -1,0 +1,58 @@
+schema_version: 1
+
+module:
+  name: nsx-tileio-ble
+  type: backend_specific
+  version: "0.0.0"
+
+support:
+  ambiqsuite: true
+  zephyr: false
+
+summary: Tileio BLE transport wrapper on top of nsx-ble.
+
+capabilities:
+  - ble
+  - gatt_server
+  - tileio
+
+use_cases:
+  - stream Tileio slot data over BLE notifications
+  - receive Tileio UIO state updates over BLE
+
+agent_keywords:
+  - tileio
+  - ble
+  - bluetooth
+  - gatt
+
+build:
+  cmake:
+    package: nsx_tileio_ble
+    targets:
+      - nsx::tileio_ble
+
+depends:
+  required:
+    - nsx-core
+    - nsx-ble
+  optional: []
+
+compatibility:
+  boards:
+    - apollo3_evb
+    - apollo3p_evb
+    - apollo510b_evb
+    - apollo4p_blue_kbr_evb
+    - apollo4p_blue_kxr_evb
+  socs:
+    - apollo3
+    - apollo3p
+    - apollo510b
+    - apollo4p
+  toolchains:
+    - arm-none-eabi-gcc
+    - atfe
+    - armclang
+
+phase: "Runtime validated on Apollo4 Blue Plus and Apollo510B via the local tileio_ble_test bring-up app; broader cleanup and optional Apollo3 follow-up remain."

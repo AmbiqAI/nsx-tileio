@@ -1,0 +1,61 @@
+schema_version: 1
+
+module:
+  name: nsx-tileio-usb
+  type: backend_specific
+  version: "0.0.0"
+
+support:
+  ambiqsuite: true
+  zephyr: false
+
+summary: Scaffold for the planned Tileio USB transport wrapper on top of nsx-usb.
+
+capabilities:
+  - usb
+  - vendor_transport
+  - tileio
+
+use_cases:
+  - stream Tileio slot data over USB vendor transport
+  - receive Tileio slot and UIO updates from a host
+
+agent_keywords:
+  - tileio
+  - usb
+  - vendor
+  - webusb
+
+build:
+  cmake:
+    package: nsx_tileio_usb
+    targets:
+      - nsx::tileio_usb
+
+depends:
+  required:
+    - nsx-core
+    - nsx-usb
+  optional: []
+
+compatibility:
+  boards:
+    - apollo4p_evb
+    - apollo4p_blue_kbr_evb
+    - apollo4p_blue_kxr_evb
+    - apollo330mP_evb
+    - apollo510_evb
+    - apollo510b_evb
+    - apollo510dL_evb
+  socs:
+    - apollo330P
+    - apollo510
+    - apollo510b
+    - apollo510L
+    - apollo4p
+  toolchains:
+    - arm-none-eabi-gcc
+    - atfe
+    - armclang
+
+phase: "Initial implementation in progress. The wrapper now targets the public nsx-usb vendor interface and no longer relies on direct TinyUSB internals, but it still needs app-level integration validation."
