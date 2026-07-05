@@ -9,7 +9,7 @@ support:
   ambiqsuite: true
   zephyr: false
 
-summary: Scaffold for the planned Tileio USB transport wrapper on top of nsx-usb.
+summary: Tileio USB transport wrapper on top of nsx-usb.
 
 capabilities:
   - usb
@@ -58,4 +58,4 @@ compatibility:
     - atfe
     - armclang
 
-phase: "Initial implementation in progress. The wrapper now targets the public nsx-usb vendor interface and no longer relies on direct TinyUSB internals, but it still needs app-level integration validation."
+phase: "Runtime validated on Apollo4 Blue Plus and Apollo510B via the local tileio_usb_test bring-up app with a Python host tool; broader cleanup and optional Apollo3 follow-up remain."
