@@ -27,6 +27,33 @@
 #define TIO_USB_RING_BUFSIZE 4096u
 #define TIO_USB_VENDOR_READ_CHUNK 256u
 
+/*
+ * NOTE on host->device write framing: real hosts (the production TileIO
+ * web dashboard, api/usb.ts's setUioState()) send each logical write as a
+ * single raw WebUSB transferOut() of the full packed TileIO packet, with no
+ * application-level chunking or per-transfer header -- WebUSB automatically
+ * splits it into as many wMaxPacketSize (64-byte) USB transactions as
+ * needed, exactly mirroring how the device->host read direction already
+ * works (tud_vendor_write() + tud_vendor_read()/transferIn() reassemble
+ * arbitrary-length transfers transparently, no headers required in either
+ * direction).
+ *
+ * An earlier version of the web app instead split writes into 62-byte
+ * payloads with a 2-byte "NS frame header" prepended to every individual
+ * 64-byte transfer (a convention inherited from an older neuralSPOT sample
+ * that multiplexed two different message types over one endpoint via that
+ * header). TileIO's packets are already self-delimited (start/stop markers
+ * + CRC16 + fixed length) and only ever carry one kind of data, so that
+ * header was pure legacy overhead: 25% larger on the wire (5x 64-byte
+ * transfers to send one 256-byte packet) and 5 separate transferOut() calls
+ * instead of 1 for a single logical write -- and, worse, this firmware
+ * never stripped it, so real web-app UIO writes never reconstructed into a
+ * valid packet at all (every 62 bytes of real data got 2 extra header
+ * bytes spliced in, destroying the START/STOP framing alignment). Both
+ * sides have been fixed together: the web app now sends one unframed
+ * write, and this handler expects (only) a plain, unframed byte stream.
+ */
+
 typedef struct {
     uint8_t *buffer;
     uint32_t size;
