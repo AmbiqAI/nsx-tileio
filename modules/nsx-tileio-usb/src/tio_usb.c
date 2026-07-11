@@ -336,6 +336,12 @@ uint32_t tio_usb_send_slot_packet(uint8_t *buffer, uint32_t length) {
     if (!nsx_usb_vendor_connected(&g_tio_usb_cfg)) {
         return NSX_USB_STATUS_NOT_CONNECTED;
     }
+    /* TileIO frames are fixed-size. Never enter nsx_usb_vendor_send() unless
+     * TinyUSB can accept the full frame, otherwise its timeout path can
+     * block this task for seconds or emit a partial, undecodable frame. */
+    if (nsx_usb_vendor_write_available(&g_tio_usb_cfg) < length) {
+        return NSX_USB_STATUS_BUSY;
+    }
 
     uint32_t status = nsx_usb_vendor_send(
         &g_tio_usb_cfg, buffer, length, &bytes_sent);
