@@ -155,7 +155,7 @@ static uint32_t tio_usb_validate_packet(
     if (slot_type == 2u && data_len != 0u && data_len != TIO_USB_UIO_BUF_LEN) {
         return NSX_STATUS_FAILURE;
     }
-    if (slot_type > 2u) {
+    if (slot_type > 3u) {
         return NSX_STATUS_FAILURE;
     }
 

@@ -11,6 +11,7 @@
 #define TIO_BLE_SLOT_TYPE_SIGNAL 0u
 #define TIO_BLE_SLOT_TYPE_METRIC 1u
 #define TIO_BLE_SLOT_TYPE_UIO    2u
+#define TIO_BLE_SLOT_TYPE_TIMED_SIGNAL 3u
 
 #define TIO_SLOT_SVC_UUID       "eecb7db88b2d402cb995825538b49328"
 #define TIO_SLOT0_SIG_CHAR_UUID "5bca2754ac7e4a27a1270f328791057a"
@@ -260,7 +261,7 @@ uint32_t tio_ble_send_slot_data(
     if (slot >= TIO_BLE_SLOT_COUNT) {
         return NS_STATUS_FAILURE;
     }
-    if (slot_type == TIO_BLE_SLOT_TYPE_SIGNAL) {
+    if (slot_type == TIO_BLE_SLOT_TYPE_SIGNAL || slot_type == TIO_BLE_SLOT_TYPE_TIMED_SIGNAL) {
         buffer = g_tio_ble.slot_sig_value[slot];
         characteristic = &g_tio_ble.slot_sig[slot];
     } else if (slot_type == TIO_BLE_SLOT_TYPE_METRIC) {
