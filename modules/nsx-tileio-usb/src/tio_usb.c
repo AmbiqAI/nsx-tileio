@@ -150,7 +150,9 @@ static uint32_t tio_usb_validate_packet(
     if (data_len > TIO_USB_DATA_LEN) {
         return NSX_STATUS_FAILURE;
     }
-    if (slot_type == 2u && data_len != TIO_USB_UIO_BUF_LEN) {
+    /* A zero-length UIO frame is a host request for the current UIO state.
+     * Eight bytes remain the only valid host-to-device state update. */
+    if (slot_type == 2u && data_len != 0u && data_len != TIO_USB_UIO_BUF_LEN) {
         return NSX_STATUS_FAILURE;
     }
     if (slot_type > 2u) {
