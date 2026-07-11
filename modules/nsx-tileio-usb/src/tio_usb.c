@@ -290,7 +290,7 @@ uint32_t tio_usb_pack_slot_data(
     if (packet == NULL) {
         return NSX_STATUS_INVALID_HANDLE;
     }
-    if (slot_type > 2u) {
+    if (slot_type > 3u) {
         return NSX_STATUS_INVALID_CONFIG;
     }
     if (length > TIO_USB_DATA_LEN) {
