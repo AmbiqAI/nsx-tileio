@@ -57,6 +57,18 @@ static int tio_ble_read_handler(
     if (dest == NULL || characteristic == NULL || characteristic->applicationValue == NULL) {
         return NS_STATUS_FAILURE;
     }
+
+    /* UIO is target-owned state. Refresh its cache immediately before each
+     * GATT read so a newly connected host cannot hydrate its controls from
+     * the zero-initialized characteristic value before the app's next queued
+     * UIO notification is delivered. The callback contract is intentionally
+     * snapshot-only because this executes in the BLE stack's read context. */
+    if (characteristic == &g_tio_ble.uio && g_tio_ble.ctx != NULL &&
+        g_tio_ble.ctx->uio_read_cb != NULL) {
+        g_tio_ble.ctx->uio_read_cb((uint8_t *)characteristic->applicationValue,
+                                   TIO_BLE_UIO_BUF_LEN);
+    }
+
     memcpy(dest, characteristic->applicationValue, characteristic->valueLen);
     return NS_STATUS_SUCCESS;
 }

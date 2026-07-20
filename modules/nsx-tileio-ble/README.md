@@ -44,6 +44,7 @@ Key configuration in `tio_ble_context_t`:
 - app callbacks:
   - `slot_update_cb`
   - `uio_update_cb`
+  - `uio_read_cb` (optional, provides the authoritative UIO snapshot for GATT reads)
 - required app-owned BLE config:
   - `pool_config`
 - optional service tuning:
@@ -113,10 +114,19 @@ static ns_ble_pool_config_t app_wsf_buffers = {
     .descNum = APP_WSF_BUFFER_POOLS,
 };
 
+/* Called synchronously from the UIO GATT read handler. Keep this to a small,
+ * non-blocking snapshot copy; do not send notifications from this callback. */
+static void uio_read_cb(uint8_t *data, uint32_t length) {
+    if (length == TIO_BLE_UIO_BUF_LEN) {
+        memcpy(data, app_uio_state, length);
+    }
+}
+
 static void radio_task(void *arg) {
     tio_ble_context_t tio = {
         .slot_update_cb = slot_update_cb,
         .uio_update_cb = uio_update_cb,
+        .uio_read_cb = uio_read_cb,
         .pool_config = &app_wsf_buffers,
         .service_name = "TIO-AP4",
         .base_handle = TIO_BLE_DEFAULT_BASE_HANDLE,
