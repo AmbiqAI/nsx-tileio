@@ -6,8 +6,9 @@ NSX transport-wrapper repository for the legacy TileIO modules from:
 
 ## Status
 
-This repository is still an **active migration checkpoint**, but both transport
-ports now have validated runtime implementations.
+This repository contains the `v0.1.0` release foundation. Both transport ports
+have validated runtime implementations; the release deliberately keeps the
+public API limited to the non-timed TileIO framing present on `main`.
 
 The legacy codebase naturally splits into two transport-specific wrappers, so
 this repo is being structured as two NSX modules under one git repository:
@@ -17,10 +18,10 @@ this repo is being structured as two NSX modules under one git repository:
 
 Current module status:
 
-- `nsx-tileio-usb`: runtime validated on Apollo4 Blue Plus and Apollo510B with
-  a Python host tool
-- `nsx-tileio-ble`: runtime validated on Apollo4 Blue Plus and Apollo510B with
-  a local BLE test app and Python host tool
+- `nsx-tileio-usb`: `0.1.0`, runtime validated on Apollo4 Blue Plus and
+  Apollo510B with a Python host tool
+- `nsx-tileio-ble`: `0.1.0`, runtime validated on Apollo4 Blue Plus and
+  Apollo510B with a local BLE test app and Python host tool
 
 The modules intentionally stay transport-focused:
 
@@ -52,6 +53,11 @@ APIs settle:
 ## Documents
 
 - `docs/migration-status.md` - current migration plan, findings, and status
+- `docs/compatibility.md` - release-qualified boards, SoCs, and toolchains
+- `CATALOG.md` - exact downstream module catalog view
+- `PROVENANCE.md` - exact source, dependency, and history audit
+- `RELEASE.md` - immutable release policy and non-claims
+- `OWNERS.md` and `NOTICE` - ownership and attribution
 - `modules/nsx-tileio-usb/README.md` - module-specific USB API, contract, and
   host notes
 - `modules/nsx-tileio-ble/README.md` - module-specific BLE API, contract, and

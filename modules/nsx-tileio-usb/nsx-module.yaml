@@ -3,11 +3,18 @@ schema_version: 1
 module:
   name: nsx-tileio-usb
   type: backend_specific
-  version: "0.0.0"
+  version: "0.1.0"
 
 support:
   ambiqsuite: true
   zephyr: false
+
+license:
+  type: BSD-3-Clause
+  note: >-
+    The adapter and public headers in this repository are distributed under
+    the repository LICENSE. nsx-core and nsx-usb remain separately licensed
+    dependencies.
 
 summary: Tileio USB transport wrapper on top of nsx-usb.
 

@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  host-structure:
+    name: Host structural contracts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Run release and transport contract tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+
+  target-smoke:
+    name: Target consumer smoke (${{ matrix.toolchain }}, ${{ matrix.board }})
+    if: ${{ vars.NSX_TILEIO_TARGET_SMOKE == 'true' }}
+    env:
+      NSX_TILEIO_CONSUMER_ROOT: ${{ vars.NSX_TILEIO_CONSUMER_ROOT }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - toolchain: arm-none-eabi-gcc
+            board: apollo4p_blue_kxr_evb
+          - toolchain: armclang
+            board: apollo510b_evb
+          - toolchain: atfe
+            board: apollo4p_blue_kxr_evb
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Require an NSX consumer workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${NSX_TILEIO_CONSUMER_ROOT:-}" || {
+            echo "Set NSX_TILEIO_CONSUMER_ROOT in the runner environment to run target smoke."
+            exit 1
+          }
+          test -d "$NSX_TILEIO_CONSUMER_ROOT"
+      - name: Configure, build, and link representative consumer
+        shell: bash
+        env:
+          NSX_TILEIO_TOOLCHAIN: ${{ matrix.toolchain }}
+          NSX_TILEIO_BOARD: ${{ matrix.board }}
+        run: |
+          set -euo pipefail
+          tests/configure_target_smoke.sh "$NSX_TILEIO_CONSUMER_ROOT" \
+            "$NSX_TILEIO_TOOLCHAIN" "$NSX_TILEIO_BOARD"
