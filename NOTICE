@@ -1,0 +1,11 @@
+nsx-tileio
+Copyright (c) 2026, Ambiq
+
+This distribution contains the NSX TileIO USB and BLE adapter modules. The
+adapter implementation is maintained by Ambiq and is licensed under the
+BSD-3-Clause License in LICENSE.
+
+The adapters were ported from the legacy AmbiqAI/ns-tileio transport sources.
+Those sources are identified in PROVENANCE.md; this repository does not
+silently relicense or vendor unrelated NSX, TinyUSB, Cordio, or AmbiqSuite
+sources. Consumers must retain the notices supplied by those dependencies.

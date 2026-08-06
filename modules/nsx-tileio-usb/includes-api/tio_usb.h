@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Copyright (c) 2026, Ambiq */
 #ifndef TIO_USB_H
 #define TIO_USB_H
 
@@ -46,4 +48,3 @@ uint32_t tio_usb_send_uio_state(const uint8_t *data, uint32_t length);
 #endif
 
 #endif
-

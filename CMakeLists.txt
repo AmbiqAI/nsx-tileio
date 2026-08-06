@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(nsx_tileio LANGUAGES C)
+project(nsx_tileio VERSION 0.1.0 LANGUAGES C)
 
 include(GNUInstallDirs)
 

@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Copyright (c) 2026, Ambiq */
 #ifndef TIO_BLE_H
 #define TIO_BLE_H
 
