@@ -21,11 +21,19 @@ extern "C" {
 typedef void (*pfnSlotUpdate)(
     uint8_t slot, uint8_t slot_type, const uint8_t *data, uint32_t length);
 typedef void (*pfnUioUpdate)(const uint8_t *data, uint32_t length);
+/*
+ * Supplies the current target-side UIO state for a BLE GATT read. The callback
+ * runs in the BLE stack's read-handler context, so it must only copy a
+ * bounded snapshot into `data`; it must not block, allocate, or send a BLE
+ * notification. `length` is always TIO_BLE_UIO_BUF_LEN.
+ */
+typedef void (*pfnUioRead)(uint8_t *data, uint32_t length);
 
 typedef struct {
-    /* App callbacks for host->target TileIO traffic. */
+    /* App callbacks for TileIO UIO and slot traffic. */
     volatile pfnUioUpdate uio_update_cb;
     volatile pfnSlotUpdate slot_update_cb;
+    volatile pfnUioRead uio_read_cb;
 
     /* Required app-owned BLE policy/configuration. */
     ns_ble_pool_config_t *pool_config;
